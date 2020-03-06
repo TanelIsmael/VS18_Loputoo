@@ -1,0 +1,29 @@
+const dbConfig = require("../config/db.config.js");
+
+const Sequelize = require("sequelize");
+const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
+  host: dbConfig.HOST,
+  dialect: dbConfig.dialect,
+  // operatorsAliases: false,
+
+  pool: {
+    max: dbConfig.pool.max,
+    min: dbConfig.pool.min,
+    acquire: dbConfig.pool.acquire,
+    idle: dbConfig.pool.idle
+  }
+});
+
+const db = {};
+
+db.Sequelize = Sequelize;
+db.sequelize = sequelize;
+
+db.practicedocs = require("./practicedoc.model.js")(sequelize, Sequelize);
+db.studentdocs = require("./studentdoc.model.js")(sequelize, Sequelize);
+db.user = require("./user.model.js")(sequelize, Sequelize);
+db.newsfeed = require('./newsfeed.model.js')(sequelize, Sequelize);
+db.hinnanguleht = require('./hinnanguleht.model')(sequelize, Sequelize);
+
+
+module.exports = db;
